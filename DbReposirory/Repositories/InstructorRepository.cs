@@ -22,6 +22,11 @@ namespace DbReposirory.Repositories
             return _appDbContext.Instructors.FirstOrDefault(I => I.InstructorCode == code);
         }
 
+        public List<Instructor> GetExperts()
+        {
+            return _appDbContext.Instructors.Where(i => i.YearsOfExperience >= 10).ToList();
+        }
+
         public bool AddInstructor (Instructor instructor)
         {
             _appDbContext.Instructors.Add(instructor);

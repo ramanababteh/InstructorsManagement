@@ -28,6 +28,12 @@ namespace API.Controllers
             else { return NotFound("No Matching Instructor Code Found."); }
         }
 
+        [HttpGet ("ex")]
+        public IActionResult GetExperts()
+        {
+            return Ok(_instructorRepository.GetExperts());
+        }
+
         [HttpPost]
         public IActionResult AddInstructor (Instructor newInstructor)
         {

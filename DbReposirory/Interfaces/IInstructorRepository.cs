@@ -6,6 +6,7 @@ namespace DbReposirory.Interfaces
     {
         public List<Instructor> GetAll();
         public Instructor GetByCode(string code);
+        public List<Instructor> GetExperts();
         public bool AddInstructor(Instructor instructor);
         public bool UpdateInstructor(Instructor instructor);
         public bool DeleteInstructor(string code);
