@@ -38,7 +38,7 @@ namespace API.Controllers
         public IActionResult AddInstructor (Instructor newInstructor)
         {
             if (_instructorRepository.AddInstructor(newInstructor)) { return Ok("Instructor Added."); }
-            else { return BadRequest("Something went Wrong, try again."); }
+            else { return BadRequest("This Instructor Code is already in use."); }
         }
 
         [HttpPut]

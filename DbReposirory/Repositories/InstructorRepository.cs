@@ -29,8 +29,14 @@ namespace DbReposirory.Repositories
 
         public bool AddInstructor (Instructor instructor)
         {
-            _appDbContext.Instructors.Add(instructor);
-            return (_appDbContext.SaveChanges() > 0);
+            var target = GetByCode(instructor.InstructorCode);
+
+            if (target == null)
+            {
+                _appDbContext.Instructors.Add(instructor);
+                return (_appDbContext.SaveChanges() > 0);
+            }
+            else { return false; }
         }
 
         public bool UpdateInstructor(Instructor instructor)
