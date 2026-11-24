@@ -27,6 +27,12 @@ namespace DbReposirory.Repositories
             return _appDbContext.Instructors.Where(i => i.YearsOfExperience >= 10).ToList();
         }
 
+        public string GetEmail(string code)
+        {
+            var target = GetByCode(code);
+            return target.Email;
+        }
+
         public bool AddInstructor (Instructor instructor)
         {
             var target = GetByCode(instructor.InstructorCode);

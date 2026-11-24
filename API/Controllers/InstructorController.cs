@@ -34,6 +34,13 @@ namespace API.Controllers
             return Ok(_instructorRepository.GetExperts());
         }
 
+        [HttpGet("contact{code}")]
+        public IActionResult ContactInstructor(string code)
+        { 
+            if (code != null) { return Ok(_instructorRepository.GetEmail(code)); } 
+            else { return NotFound("No available cotact info for this Instructor."); }
+            }
+
         [HttpPost]
         public IActionResult AddInstructor (Instructor newInstructor)
         {
