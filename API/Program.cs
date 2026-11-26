@@ -1,4 +1,6 @@
 using API.Pipeline;
+using API.Services;
+using API.ServicesInterfaces;
 using DbReposirory;
 using DbReposirory.Interfaces;
 using DbReposirory.Repositories;
@@ -9,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<IInstructorService, InstructorService>();
 
 builder.Services.AddScoped<IInstructorRepository, InstructorRepository>();
 

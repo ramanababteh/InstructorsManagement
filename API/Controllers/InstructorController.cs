@@ -1,5 +1,5 @@
-﻿using DbReposirory.Interfaces;
-using DbReposirory.Models;
+﻿using API.DTOs;
+using API.ServicesInterfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -8,22 +8,22 @@ namespace API.Controllers
     [ApiController]
     public class InstructorController : ControllerBase
     {
-        private readonly IInstructorRepository _instructorRepository;
-        public InstructorController(IInstructorRepository instructorRepository)
+        private readonly IInstructorService _instructorService;
+        public InstructorController(IInstructorService instructorService)
         {
-            _instructorRepository = instructorRepository;
+            _instructorService = instructorService;
         }
 
         [HttpGet]
         public IActionResult GetAll ()
         {
-            return Ok(_instructorRepository.GetAll());
+            return Ok(_instructorService.GetAll());
         }
 
         [HttpGet("{code}")]
         public IActionResult GetById (string code)
         {
-            var item = _instructorRepository.GetByCode(code);
+            var item = _instructorService.GetByCode(code);
             if (item != null) { return Ok(item); }
             else { return NotFound("No Matching Instructor Code Found."); }
         }
@@ -31,34 +31,35 @@ namespace API.Controllers
         [HttpGet ("ex")]
         public IActionResult GetExperts()
         {
-            return Ok(_instructorRepository.GetExperts());
+            return Ok(_instructorService.GetExperts());
         }
 
-        [HttpGet("contact{code}")]
+        [HttpGet("contact/{code}")]
         public IActionResult ContactInstructor(string code)
-        { 
-            if (code != null) { return Ok(_instructorRepository.GetEmail(code)); } 
+        {
+            string email = _instructorService.GetEmail(code);
+            if (email != null) { return Ok(email); } 
             else { return NotFound("No available cotact info for this Instructor."); }
-            }
+        }
 
         [HttpPost]
-        public IActionResult AddInstructor (Instructor newInstructor)
+        public IActionResult AddInstructor (InstructorDto newInstructor)
         {
-            if (_instructorRepository.AddInstructor(newInstructor)) { return Ok("Instructor Added."); }
-            else { return BadRequest("This Instructor Code is already in use."); }
+            if (_instructorService.AddInstructor(newInstructor)) { return Ok("Instructor Added."); }
+            else { return Conflict("This Instructor Code is already in use."); }
         }
 
         [HttpPut]
-        public IActionResult UpdateInstructor (Instructor newInstructor)
+        public IActionResult UpdateInstructor (InstructorDto newInstructor)
         {
-            if (_instructorRepository.UpdateInstructor(newInstructor)) { return Ok("Data Updated."); }
+            if (_instructorService.UpdateInstructor(newInstructor)) { return Ok("Data Updated."); }
             else { return NotFound("No Matching Instructor Code Found."); }
         }
 
         [HttpDelete ("{code}")]
         public IActionResult DeleteInstructor (string code)
         {
-            if (_instructorRepository.DeleteInstructor(code)) { return Ok("Instructor Removed."); }
+            if (_instructorService.DeleteInstructor(code)) { return Ok("Instructor Removed."); }
             else { return NotFound("No Matching Instructor Code Found."); }
         }
     }
