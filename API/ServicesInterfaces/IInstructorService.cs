@@ -6,11 +6,10 @@ namespace API.ServicesInterfaces
     {
         public List<InstructorDto> GetAll();
         public InstructorDto? GetByCode(string code);
-        public List<InstructorDto> GetExperts();
+        public List<InstructorDto> GetExperts(int minExperience);
         public string? GetEmail(string code);
         public bool AddInstructor(InstructorDto dto);
         public bool UpdateInstructor(InstructorDto dto);
         public bool DeleteInstructor(string code);
-        public bool IsExistInstructor(string code);
     }
 }

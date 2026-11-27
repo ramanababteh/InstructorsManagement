@@ -27,34 +27,24 @@ namespace DbReposirory.Repositories
             return _appDbContext.Instructors.Where(i => i.YearsOfExperience >= minExperience).ToList();
         }
 
-        public string? GetEmail(string code)
+        public bool AddInstructor (Instructor newInstructor)
         {
-            var target = GetByCode(code);
-            return target?.Email;
-        }
-
-        public bool AddInstructor (Instructor instructor)
-        {
-            _appDbContext.Instructors.Add(instructor);
+            _appDbContext.Instructors.Add(newInstructor);
             return (_appDbContext.SaveChanges() > 0);
         }
 
-        public bool UpdateInstructor(Instructor instructor)
+        public bool UpdateInstructor(Instructor updated, Instructor target)
         {
-            var target = GetByCode(instructor.InstructorCode);
-
-            target.FullName = instructor.FullName;
-            target.Email = instructor.Email;
-            target.YearsOfExperience = instructor.YearsOfExperience;
-            target.Bio = instructor.Bio;
+            target.FullName = updated.FullName;
+            target.Email = updated.Email;
+            target.YearsOfExperience = updated.YearsOfExperience;
+            target.Bio = updated.Bio;
 
             return (_appDbContext.SaveChanges() > 0);
         }
 
-        public bool DeleteInstructor(string code)
+        public bool DeleteInstructor(Instructor target)
         {
-            var target = GetByCode(code);
-
             _appDbContext.Instructors.Remove(target);
             return (_appDbContext.SaveChanges() > 0);
         }

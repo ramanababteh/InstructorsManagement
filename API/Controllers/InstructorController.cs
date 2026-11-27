@@ -21,38 +21,40 @@ namespace API.Controllers
         }
 
         [HttpGet("{code}")]
-        public IActionResult GetById (string code)
+        public IActionResult GetByCode (string code)
         {
-            var item = _instructorService.GetByCode(code);
-            if (item != null) { return Ok(item); }
+            var instructor = _instructorService.GetByCode(code);
+
+            if (instructor != null) { return Ok(instructor); }
             else { return NotFound("No Matching Instructor Code Found."); }
         }
 
-        [HttpGet ("ex")]
-        public IActionResult GetExperts()
+        [HttpGet ("experts/{minExperience?}")]
+        public IActionResult GetExperts (int minExperience = 10)
         {
-            return Ok(_instructorService.GetExperts());
+            return Ok(_instructorService.GetExperts(minExperience));
         }
 
         [HttpGet("contact/{code}")]
-        public IActionResult ContactInstructor(string code)
+        public IActionResult ContactInstructor (string code)
         {
-            string email = _instructorService.GetEmail(code);
+            string? email = _instructorService.GetEmail(code);
+
             if (email != null) { return Ok(email); } 
-            else { return NotFound("No available cotact info for this Instructor."); }
+            else { return NotFound("No available contact info for this Instructor."); }
         }
 
         [HttpPost]
         public IActionResult AddInstructor (InstructorDto newInstructor)
         {
-            if (_instructorService.AddInstructor(newInstructor)) { return Ok("Instructor Added."); }
+            if (_instructorService.AddInstructor(newInstructor)) { return Created("Instructor Added.", newInstructor); }
             else { return Conflict("This Instructor Code is already in use."); }
         }
 
         [HttpPut]
-        public IActionResult UpdateInstructor (InstructorDto newInstructor)
+        public IActionResult UpdateInstructor (InstructorDto updatedInstructor)
         {
-            if (_instructorService.UpdateInstructor(newInstructor)) { return Ok("Data Updated."); }
+            if (_instructorService.UpdateInstructor(updatedInstructor)) { return Ok("Data Updated."); }
             else { return NotFound("No Matching Instructor Code Found."); }
         }
 

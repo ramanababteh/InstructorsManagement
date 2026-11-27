@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace DbReposirory.Models
+﻿namespace DbReposirory.Models
 {
     public class Instructor
     {

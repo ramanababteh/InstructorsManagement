@@ -26,54 +26,60 @@ namespace API.Services
             return instructor?.Adapt<InstructorDto>();
         }
 
-        public List<InstructorDto> GetExperts()
+        public List<InstructorDto> GetExperts(int minExperience)
         {
-            int minExperience = 10;
             var instructors = _instructorRepository.GetExperts(minExperience);
             return instructors.Adapt<List<InstructorDto>>();
         }
 
         public string? GetEmail(string code)
         {
-            if (IsExistInstructor(code))
+            var targetInstructor = GetTarget(code);
+
+            if (targetInstructor != null)
             {
-                return _instructorRepository.GetEmail(code);
+                return targetInstructor.Email;
             }
             else { return null; }
         }
 
         public bool AddInstructor(InstructorDto dto)
         {
-            if (!IsExistInstructor(dto.InstructorCode))
+            var newInstructor = dto.Adapt<Instructor>();
+
+            if (GetTarget(newInstructor.InstructorCode) == null)
             {
-                var instructor = dto.Adapt<Instructor>();
-                return _instructorRepository.AddInstructor(instructor);
+                return _instructorRepository.AddInstructor(newInstructor);
             }
             else { return false; }
         }
 
         public bool UpdateInstructor(InstructorDto dto)
         {
-            if (IsExistInstructor(dto.InstructorCode))
+            var updatedInstructor = dto.Adapt<Instructor>();
+            var targetInstructor = GetTarget(dto.InstructorCode);
+
+            if (targetInstructor != null)
             {
-                var instructor = dto.Adapt<Instructor>();
-                return _instructorRepository.UpdateInstructor(instructor);
+                return _instructorRepository.UpdateInstructor(updatedInstructor, targetInstructor);
             }
             else { return false; }
         }
 
         public bool DeleteInstructor(string code)
         {
-            if (IsExistInstructor(code))
+            var targetInstructor = GetTarget(code);
+
+            if (targetInstructor != null)
             {
-                return _instructorRepository.DeleteInstructor(code);
+                return _instructorRepository.DeleteInstructor(targetInstructor);
             }
             else { return false; }
         }
 
-        public bool IsExistInstructor(string code)
+        private Instructor? GetTarget(string code)
         {
-            return _instructorRepository.GetByCode(code) != null;
+            return _instructorRepository.GetByCode(code);
         }
     }
 }
